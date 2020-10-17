@@ -3,7 +3,7 @@ import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 const UrgeWithPleasureComponent = () => (
   <CountdownCircleTimer
     isPlaying
-    duration={10}
+    duration={150}
     colors={[
       ['#004777', 0.33],
       ['#F7B801', 0.33],
