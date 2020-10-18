@@ -74,16 +74,14 @@ const LandingPage = () => {
             <h2>No Team</h2>
             {!dialogOpen && team === TEAMS.NO_TEAM && userVideoComponent ? userVideoComponent: null}
         </div>
-        {!dialogOpen ? showJoinTeamButtons() : null}
+        {isNameCreated && team === TEAMS.NO_TEAM ? showJoinTeamButtons() : null}
 
         <div className="all-team-sections">
             <div className="team1-section">
                 <h2>Team 1</h2>
-                {isNameCreated === true && team === TEAMS.TEAM_1 && userVideoComponent ? userVideoComponent : null}
             </div>
             <div className="team2-section">
                 <h2>Team 2</h2>
-                {isNameCreated === true && team === TEAMS.TEAM_2 && userVideoComponent ? userVideoComponent: null}
             </div>
         </div>
     </>
