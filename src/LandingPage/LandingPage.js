@@ -3,13 +3,23 @@ import React, {useEffect, useState} from 'react';
 import VideoKitComponent from '../VideoKitComponent';
 import NameGrid from './NameGrid';
 import NameInputDialog from './NameInputDialog';
+import './LandingPage.css';
 
 
 const LandingPage = () => {
+    const TEAMS = {
+        NO_TEAM: "NO_TEAM",
+        TEAM_1: "TEAM_1",
+        TEAM_2: "TEAM_2",
+    }
+
+
     const [dialogOpen, setDialogOpen] = useState(true)
     const [isInvalidNameInput, setIsInvalidNameInput] = useState(false)
     const [nameInput, setNameInput] = useState(null)
     const [isNameCreated, setIsNameCreated] = useState(false)
+    const [team, setTeam] = useState(null)
+    const [userVideoComponent, setUserVideoComponent] = useState(null)
 
     const onConfirm = () => {
         // TODO set username for user once they join and prompt close dialog action
@@ -31,32 +41,51 @@ const LandingPage = () => {
 
     useEffect(() => {
         // Once dialog is closed and a valid name is entered, set to true to render video component with inputted name
-        if (dialogOpen === false) {
+        if (dialogOpen === false && !isNameCreated) {
             setIsNameCreated(true)
+            setTeam(TEAMS.NO_TEAM);
+            setUserVideoComponent(<VideoKitComponent name={nameInput}/>)
         }
-    }, [dialogOpen])
+    }, [dialogOpen, isNameCreated])
 
-    const getJoinTeamButtons = () => {
+    const showJoinTeamButtons = () => {
         return (
             <ButtonGroup variant="contained">
-                <Button>Join Team 1</Button>
-                <Button>Join Team 2</Button>
+                <Button onClick={handleClickTeam1Button}>Join Team 1</Button>
+                <Button onClick={handleClickTeam2Button}>Join Team 2</Button>
             </ButtonGroup>
         )
+    }
+
+    const handleClickTeam1Button = () => {
+        setTeam(TEAMS.TEAM_1)
+    }
+
+    const handleClickTeam2Button = () => {
+        setTeam(TEAMS.TEAM_2)
     }
 
     return (
     <>
         <NameInputDialog onChange={onChange} onClose={onClose} onConfirm={onConfirm} dialogOpen={dialogOpen} isInvalidNameInput={isInvalidNameInput}/>
         <h1>Charades</h1>
-        <Grid>
-        <h2>No Team</h2>
-        {isNameCreated === true ? (<VideoKitComponent name={nameInput}/>): null}
-        </Grid>
-        {!dialogOpen ? getJoinTeamButtons() : null}
+        
+        <div className="no-team-section">
+            <h2>No Team</h2>
+            {!dialogOpen && team === TEAMS.NO_TEAM && userVideoComponent ? userVideoComponent: null}
+        </div>
+        {!dialogOpen ? showJoinTeamButtons() : null}
 
-        <h2>Team 1</h2>
-        <h2>Team 2</h2>
+        <div className="all-team-sections">
+            <div className="team1-section">
+                <h2>Team 1</h2>
+                {isNameCreated === true && team === TEAMS.TEAM_1 && userVideoComponent ? userVideoComponent : null}
+            </div>
+            <div className="team2-section">
+                <h2>Team 2</h2>
+                {isNameCreated === true && team === TEAMS.TEAM_2 && userVideoComponent ? userVideoComponent: null}
+            </div>
+        </div>
     </>
     )
 }

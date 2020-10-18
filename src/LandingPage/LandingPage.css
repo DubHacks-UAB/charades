@@ -1,0 +1,12 @@
+.all-team-sections {
+    display: flex;
+    justify-content: space-around;
+}
+
+.team1-section {
+    color: blue;
+}
+
+.team2-section {
+    color: red;
+}
