@@ -16,6 +16,7 @@ const socket = socketIOClient(ENDPOINT);
 // TODO - set team number limit
 // TODO - set captain
 // TODO - show server full if team capacity met
+// TODO - show error if server not working
 
 
 const LandingPage = () => {

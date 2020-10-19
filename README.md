@@ -1,9 +1,14 @@
-<<<<<<< HEAD
 # charades
-=======
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Running the App
+### React App
+Run using `npm start` to run the React app locally. To view changes, visit `http://localhost:3000/`.
+
+### NodeJS Server
+Run the `server.js` file using the `node` command. Example: `node src/server/server.js`.
+
+## Available Scripts (Create React App)
 
 In the project directory, you can run:
 
@@ -69,4 +74,3 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
->>>>>>> bd921f23c6e56222fa7522fd78eaac7a248df071
