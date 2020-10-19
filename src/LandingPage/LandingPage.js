@@ -5,6 +5,10 @@ import NameGrid from './NameGrid';
 import NameInputDialog from './NameInputDialog';
 import './LandingPage.css';
 
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://127.0.0.1:4001";
+const socket = socketIOClient(ENDPOINT);
+
 
 const LandingPage = () => {
     const TEAMS = {
@@ -13,6 +17,14 @@ const LandingPage = () => {
         TEAM_2: "TEAM_2",
     }
 
+    const [response, setResponse] = useState("");
+
+    // useEffect(() => {
+    //   const socket = socketIOClient(ENDPOINT);
+    //   socket.on("FromAPI", data => {
+    //     setResponse(data);
+    //   });
+    // }, []);
 
     const [dialogOpen, setDialogOpen] = useState(true)
     const [isInvalidNameInput, setIsInvalidNameInput] = useState(false)
@@ -20,6 +32,38 @@ const LandingPage = () => {
     const [isNameCreated, setIsNameCreated] = useState(false)
     const [team, setTeam] = useState(null)
     const [userVideoComponent, setUserVideoComponent] = useState(null)
+
+    const [teamSelected, setTeamSelected] = useState(null)
+
+
+    useEffect(() => {
+        if (teamSelected === TEAMS.TEAM_1 || teamSelected === TEAMS.TEAM_2) {
+            updateTeamInServer();
+        }
+    }, [teamSelected])
+
+    const updateTeamInServer = () => {
+        socket.emit("updateTeam", {
+            teamSelected: teamSelected,
+            userName: nameInput,
+        })
+
+    socket.on('updateTeamForUser', (data) => {
+        if (data.status === 'SUCCESS') {
+            setTeam(data.newTeam)
+        }
+    })
+
+        // if (teamSelected === TEAMS.TEAM_1) {
+        //     socket.on("toAPI", teamSelected => {
+        //         setResponse(data);
+        //       });
+        // }
+    };
+
+    useEffect(() => {
+        console.log("NEW TEAM! "+ team)
+    }, [team])
 
     const onConfirm = () => {
         // TODO set username for user once they join and prompt close dialog action
@@ -58,30 +102,37 @@ const LandingPage = () => {
     }
 
     const handleClickTeam1Button = () => {
-        setTeam(TEAMS.TEAM_1)
+        // setTeam(TEAMS.TEAM_1)
+        setTeamSelected(TEAMS.TEAM_1)
     }
 
     const handleClickTeam2Button = () => {
-        setTeam(TEAMS.TEAM_2)
+        // setTeam(TEAMS. TEAM_2)
+        setTeamSelected(TEAMS.TEAM_2)
     }
 
     return (
     <>
         <NameInputDialog onChange={onChange} onClose={onClose} onConfirm={onConfirm} dialogOpen={dialogOpen} isInvalidNameInput={isInvalidNameInput}/>
         <h1>Charades</h1>
-        
+        {/* <p>
+      It's <time dateTime={response}>{response}</time>
+    </p> */}
         <div className="no-team-section">
             <h2>No Team</h2>
             {!dialogOpen && team === TEAMS.NO_TEAM && userVideoComponent ? userVideoComponent: null}
         </div>
-        {isNameCreated && team === TEAMS.NO_TEAM ? showJoinTeamButtons() : null}
+        {/* {isNameCreated && team  ? showJoinTeamButtons() : null} */}
+        {showJoinTeamButtons()}
 
         <div className="all-team-sections">
             <div className="team1-section">
                 <h2>Team 1</h2>
+                {team === TEAMS.TEAM_1 && userVideoComponent ? userVideoComponent : null}
             </div>
             <div className="team2-section">
                 <h2>Team 2</h2>
+                {team === TEAMS.TEAM_2 && userVideoComponent ? userVideoComponent : null}
             </div>
         </div>
     </>
