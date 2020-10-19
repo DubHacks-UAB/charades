@@ -30,12 +30,18 @@ const getApiAndEmit = socket => {
 
 let interval;
 
+const team1Members = temp.team1.members;
+const team2Members = temp.team2.members;
+
 io.on("connection", (socket) => {
+
+  if (team1Members.length > 0) {
+    // TODO show team in beginning like this?
+  }
   console.log("New client connected");
   socket.on("updateTeam", (data) => {
     console.log("Hey!" + data.teamSelected)
-    const team1Members = temp.team1.members;
-    const team2Members = temp.team2.members;
+
     
     // TODO data.teamSelected === 'TEAM_1' OR change to newTeam vs oldTeam
     // TODO data.previousTeam === ...
@@ -54,9 +60,11 @@ io.on("connection", (socket) => {
       team2Members.push(data.userName)
     }
     console.log(temp)
-    socket.emit("updateTeamForUser", {
+    console.log("TEST" + Object.assign({}, temp))
+    io.sockets.emit("updateTeamForUser", {
       userName: data.userName,
       newTeam: data.teamSelected,
+      teams: Object.assign({}, temp),
       status: 'SUCCESS'
     })
   })
